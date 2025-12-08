@@ -1,0 +1,185 @@
+#show running-config
+Building configuration...
+
+Current configuration : 3740 bytes
+!
+version 17.16
+service timestamps debug datetime msec
+service timestamps log datetime msec
+!
+hostname Roteador
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!         
+!         
+!         
+!         
+ip cef    
+login on-success log
+no ipv6 cef
+!         
+!         
+!         
+!         
+!         
+!         
+!         
+!         
+!         
+!         
+crypto pki trustpoint TP-self-signed-131184642
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-131184642
+ revocation-check none
+ rsakeypair TP-self-signed-131184642
+ hash sha512
+!         
+!         
+crypto pki certificate chain TP-self-signed-131184642
+ certificate self-signed 01
+  3082032E 30820216 A0030201 02020101 300D0609 2A864886 F70D0101 0D050030 
+  30312E30 2C060355 04030C25 494F532D 53656C66 2D536967 6E65642D 43657274 
+  69666963 6174652D 31333131 38343634 32301E17 0D323531 30333030 38343434 
+  375A170D 33353130 33303038 34343437 5A303031 2E302C06 03550403 0C25494F 
+  532D5365 6C662D53 69676E65 642D4365 72746966 69636174 652D3133 31313834 
+  36343230 82012230 0D06092A 864886F7 0D010101 05000382 010F0030 82010A02 
+  82010100 9D099CC8 F36F53FA 77B7110A 4BDC138E AB57A47A 319B2D9A DB08AACF 
+  1A56FCDB 3E8A0635 E127BE48 8F335168 E7694F18 F0411D40 00BABC61 2CDDDABC 
+  A614C746 AA3E4D3A 4124F852 A5FDE795 5F71E35A 88A2E4FB 6DCF502A 173933FC 
+  CFB447AA 631C59C9 EF154E66 3DF1F241 6BFE9E29 F2B7EE93 4FBA1A54 9999AACA 
+  9455D923 4674235E 40D9BCC9 C0AEBE92 B9D001AF 1F42DECF 586404C4 2BCFC30B 
+  CA5B7AA6 87815EBE F54D5E6C 43E6D0EF D7467CD9 8BD12090 986D0F33 7532E7DE 
+  E4EE53CE 246620B0 62A98F28 F39DE197 25725234 F4ECE16A B3821C7A D2A28187 
+  D3F63990 634062A7 02519DD7 03580711 3E09C279 A7DA86C6 E1DA0967 F09E6421 
+  53A3A50B 02030100 01A35330 51301D06 03551D0E 04160414 457835FE A7038C48 
+  59BC6B4B D74D9192 8C815A66 301F0603 551D2304 18301680 14457835 FEA7038C 
+  4859BC6B 4BD74D91 928C815A 66300F06 03551D13 0101FF04 05300301 01FF300D 
+  06092A86 4886F70D 01010D05 00038201 010071AB 831997AA FEB19169 37AC59DF 
+  C54812A5 20D9F137 8652FCEA BA1614F1 328A407E B0CBAC44 F14D22A3 D57060AC 
+  638AEE13 26592327 10E704E2 5F9E31EF 92A30ADE 87FF21F4 EF113C98 EC50A270 
+  28231574 67626A7F 6D75889B B23C8E70 43BBCE6C A51AED3C 92811874 A3F615D9 
+  F416F911 8DAC4ABF 99EEDE38 9E13DEF6 90AC071A C67D809F A9CDAF47 956D4F71 
+  0E183A6B 5595B197 8E05501E B119B04C B3DFB282 7EA6A0BA E55D59AC A0F5BC28 
+  91D4ED1E D26347CD DF3C3493 031F82D4 910605D8 28DC2C15 74DEE669 2358E054 
+  C56D585C 2FD5C94B 284F497F E2DBE616 7A61CBBC 6B41C91F 25DED432 5E872804 
+  6E4B53E4 1B5389F7 969500F5 FF4D79F8 37F1
+        quit
+!         
+!         
+memory free low-watermark processor 79983
+!         
+!         
+spanning-tree mode rapid-pvst
+!         
+!         
+!         
+!         
+!         
+!         
+!         
+!         
+!         
+!         
+!         
+!         
+!         
+!         
+!         
+!         
+!         
+!         
+!         
+!         
+!         
+!         
+!         
+interface Ethernet0/0
+ no ip address
+!         
+interface Ethernet0/0.10
+ encapsulation dot1Q 10
+ ip address 192.168.10.1 255.255.255.0
+ ip nat inside
+!         
+interface Ethernet0/1
+ no ip address
+!         
+interface Ethernet0/1.20
+ encapsulation dot1Q 20
+ ip address 192.168.20.1 255.255.255.0
+ ip nat inside
+!         
+interface Ethernet0/2
+ ip address 192.168.255.100 255.255.255.0
+ ip nat outside
+!         
+interface Ethernet0/3
+ no ip address
+ shutdown 
+!         
+interface Serial1/0
+ no ip address
+ shutdown 
+ serial restart-delay 0
+!         
+interface Serial1/1
+ no ip address
+ shutdown 
+ serial restart-delay 0
+!         
+interface Serial1/2
+ no ip address
+ shutdown 
+ serial restart-delay 0
+!         
+interface Serial1/3
+ no ip address
+ shutdown 
+ serial restart-delay 0
+!         
+ip forward-protocol nd
+ip forward-protocol udp
+!         
+!         
+ip http server
+ip http secure-server
+ip nat inside source list 1 interface Ethernet0/2 overload
+ip route 0.0.0.0 0.0.0.0 192.168.255.1
+ip ssh bulk-mode 131072
+no logging btrace
+ip access-list standard 1
+ 10 permit 192.168.10.0 0.0.0.255
+ 20 permit 192.168.20.0 0.0.0.255
+!         
+!         
+!         
+control-plane
+!         
+!         
+!         
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login    
+ transport input ssh
+!         
+!         
+!         
+!         
+end       
+          
+Roteador#

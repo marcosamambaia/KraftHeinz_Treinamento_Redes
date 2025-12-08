@@ -1,0 +1,1425 @@
+annotations:
+  - border_color: '#00000000'
+    border_style: ''
+    color: '#808080FF'
+    rotation: 0
+    text_bold: false
+    text_content: |-
+      === Topologia Layer 3 com VLANs e Internet ===
+
+      [Alpine-0]
+        IP: 192.168.10.10
+        Gateway: 192.168.10.1
+        Conectado à:
+          |
+          v
+      [IOL-L2 #1]
+        - Ethernet0/1: Access VLAN 10 (Alpine-0)
+        - Ethernet0/2: Trunk para roteador (E0/0)
+          |
+          v
+      [IOL (4s)]
+        - Ethernet0/0: Trunk para IOL-L2 #1
+          - Subinterface E0/0.10 → VLAN 10 → IP 192.168.10.1
+          - Subinterface E0/0.20 → VLAN 20 → IP 192.168.20.1
+        - Ethernet0/1: Trunk para IOL-L2 #2
+        - Ethernet0/2: Conexão externa (Internet)
+          - IP: 200.200.200.2
+          - Gateway: 200.200.200.1
+          |
+          v
+      [IOL-L2 #2]
+        - Ethernet0/1: Access VLAN 20 (Alpine-1)
+        - Ethernet0/2: Trunk para roteador (E0/1)
+          |
+          v
+      [Alpine-1]
+        IP: 192.168.20.20
+        Gateway: 192.168.20.1
+
+      [Internet]
+        Conectado ao roteador via Ethernet0/2
+        IP externo: 200.200.200.1
+    text_font: monospace
+    text_italic: false
+    text_size: 12
+    text_unit: pt
+    thickness: 1
+    type: text
+    x1: 2240.0
+    y1: -3280.0
+    z_index: 0
+  - border_color: '#00000000'
+    border_style: ''
+    color: '#808080FF'
+    rotation: 0
+    text_bold: false
+    text_content: Vlan-10
+    text_font: monospace
+    text_italic: false
+    text_size: 12
+    text_unit: pt
+    thickness: 1
+    type: text
+    x1: 2120.0
+    y1: -1880.0
+    z_index: 1
+  - border_color: '#00000000'
+    border_style: ''
+    color: '#808080FF'
+    rotation: 0
+    text_bold: false
+    text_content: Vlan-20
+    text_font: monospace
+    text_italic: false
+    text_size: 12
+    text_unit: pt
+    thickness: 1
+    type: text
+    x1: 2760.0
+    y1: -1880.0
+    z_index: 2
+  - border_color: '#00000000'
+    border_style: ''
+    color: '#808080FF'
+    rotation: 0
+    text_bold: false
+    text_content: |-
+      Roteador#show running-config
+      Building configuration...
+
+      Current configuration : 3801 bytes
+      !
+      ! Last configuration change at 08:22:05 UTC Thu Nov 6 2025
+      !
+      version 17.16
+      service timestamps debug datetime msec
+      service timestamps log datetime msec
+      !
+      hostname Roteador
+      !
+      boot-start-marker
+      boot-end-marker
+      !
+      !
+      no aaa new-model
+      !
+
+      !
+      !
+      ip cef
+      login on-success log
+      no ipv6 cef
+      !
+      !
+
+      !
+      !
+      !
+      crypto pki trustpoint TP-self-signed-131184642
+       enrollment selfsigned
+       subject-name cn=IOS-Self-Signed-Certificate-131184642
+       revocation-check none
+       rsakeypair TP-self-signed-131184642
+       hash sha512
+      !
+      !
+      crypto pki certificate chain TP-self-signed-131184642
+       certificate self-signed 01
+
+              quit
+      !
+      !
+      memory free low-watermark processor 79983
+      !
+      !
+      spanning-tree mode rapid-pvst
+      !
+      !
+
+      !
+      !
+      !
+      !
+      !
+      interface Ethernet0/0
+       no ip address
+      !
+      interface Ethernet0/0.10
+       encapsulation dot1Q 10
+       ip address 192.168.10.1 255.255.255.0
+       ip nat inside
+      !
+      interface Ethernet0/1
+       no ip address
+      !
+      interface Ethernet0/1.20
+       encapsulation dot1Q 20
+       ip address 192.168.20.1 255.255.255.0
+       ip nat inside
+      !
+      interface Ethernet0/2
+       ip address 192.168.255.100 255.255.255.0
+       ip nat outside
+      !
+      interface Ethernet0/3
+       no ip address
+       shutdown
+      !
+      interface Serial1/0
+       no ip address
+       shutdown
+       serial restart-delay 0
+      !
+      interface Serial1/1
+       no ip address
+       shutdown
+       serial restart-delay 0
+      !
+      interface Serial1/2
+       no ip address
+       shutdown
+       serial restart-delay 0
+      !
+      interface Serial1/3
+       no ip address
+       shutdown
+       serial restart-delay 0
+      !
+      ip forward-protocol nd
+      ip forward-protocol udp
+      !
+      !
+      ip http server
+      ip http secure-server
+      ip nat inside source list 1 interface Ethernet0/2 overload
+      ip route 0.0.0.0 0.0.0.0 192.168.255.1
+      ip ssh bulk-mode 131072
+      no logging btrace
+      ip access-list standard 1
+       10 permit 192.168.10.0 0.0.0.255
+       20 permit 192.168.20.0 0.0.0.255
+      !
+      !
+      !
+      control-plane
+      !
+      !
+      !
+      line con 0
+       logging synchronous
+      line aux 0
+      line vty 0 4
+       login
+       transport input ssh
+      !
+      !
+      !
+      !
+      end
+
+      Roteador#
+    text_font: monospace
+    text_italic: false
+    text_size: 12
+    text_unit: pt
+    thickness: 1
+    type: text
+    x1: 2360.0
+    y1: -1640.0
+    z_index: 3
+  - border_color: '#00000000'
+    border_style: ''
+    color: '#808080FF'
+    rotation: 0
+    text_bold: false
+    text_content: |-
+      Switch-SW0#show running-config
+      Building configuration...
+
+      Current configuration : 3234 bytes
+      !
+      ! Last configuration change at 08:06:52 UTC Thu Nov 6 2025
+      !
+      version 17.16
+      service timestamps debug datetime msec
+      service timestamps log datetime msec
+      !
+      hostname Switch-SW0
+      !
+      boot-start-marker
+      boot-end-marker
+      !
+      !
+      no aaa new-model
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      ip audit notify log
+      ip audit po max-events 100
+      ip cef
+      login on-success log
+      no ipv6 cef
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      crypto pki trustpoint TP-self-signed-131184645
+       enrollment selfsigned
+       subject-name cn=IOS-Self-Signed-Certificate-131184645
+       revocation-check none
+       rsakeypair TP-self-signed-131184645
+       hash sha512
+      !
+      !
+      crypto pki certificate chain TP-self-signed-131184645
+       certificate self-signed 01
+
+              quit
+      !
+      !
+      memory free low-watermark processor 79497
+      !
+      !
+      spanning-tree mode rapid-pvst
+      spanning-tree extend system-id
+      !
+      !
+      vlan internal allocation policy ascending
+      !
+      !
+      !
+      !
+      !
+      interface Ethernet0/0
+      !
+      interface Ethernet0/1
+       switchport access vlan 10
+       switchport mode access
+      !
+      interface Ethernet0/2
+       switchport trunk encapsulation dot1q
+       switchport trunk allowed vlan 10,20
+       switchport mode trunk
+      !
+      interface Ethernet0/3
+      !
+      ip forward-protocol nd
+      ip forward-protocol udp
+      !
+      !
+      ip http server
+      ip http secure-server
+      ip ssh bulk-mode 131072
+      !
+      no logging btrace
+      !
+      !
+      !
+      control-plane
+      !
+      !
+      !
+      line con 0
+       logging synchronous
+      line aux 0
+      line vty 0 4
+       login
+       transport input ssh
+      !
+      !
+      end
+
+      Switch-SW0#
+    text_font: monospace
+    text_italic: false
+    text_size: 12
+    text_unit: pt
+    thickness: 1
+    type: text
+    x1: 1800.0
+    y1: -1640.0
+    z_index: 4
+  - border_color: '#00000000'
+    border_style: ''
+    color: '#808080FF'
+    rotation: 0
+    text_bold: false
+    text_content: |-
+      # 1. Configurar IP fixo
+      sudo ip addr add 192.168.20.10/24 dev eth0
+      sudo ip link set eth0 up
+
+      # 2. Configurar gateway padrão
+      sudo ip route add default via 192.168.20.1
+
+      # 3. Testar conectividade interna
+      ping 192.168.20.1       # Deve responder (roteador)
+      ping 192.168.10.10       # Teste com Alpine da VLAN 10, se estiver ativo
+
+      # 4. Testar internet
+      ping 8.8.8.8             # Deve funcionar via NAT
+
+      TUTORIAL: Corrigir DNS no Alpine Linux
+      ======================================
+
+      Problema:
+      ---------
+      O computador consegue pingar endereços IP (como 8.8.8.8), mas não consegue acessar sites como www.google.com.
+      Isso indica que o DNS não está configurado corretamente.
+
+      Solução:
+      --------
+
+      1. Abrir o terminal
+
+      2. Editar o arquivo de configuração de DNS:
+         Alpine Linux usa o arquivo /etc/resolv.conf para definir os servidores DNS.
+
+         Execute o seguinte comando:
+         sudo vi /etc/resolv.conf
+
+         Se estiver usando vi pela primeira vez:
+         - Pressione a tecla "i" para entrar no modo de edição
+         - Digite as seguintes linhas:
+           nameserver 8.8.8.8
+           nameserver 1.1.1.1
+
+         - Pressione "Esc"
+         - Digite :wq e pressione Enter para salvar e sair
+
+      3. Testar se o DNS está funcionando:
+         Execute:
+         ping www.google.com
+         nslookup www.google.com
+
+         Se os comandos responderem, o DNS está funcionando corretamente.
+
+      Observação:
+      -----------
+      Em Alpine Linux, o arquivo /etc/resolv.conf pode ser sobrescrito por serviços como DHCP.
+
+      Para evitar isso, execute:
+
+      sudo rm /etc/resolv.conf
+      echo -e "nameserver 8.8.8.8\nnameserver 1.1.1.1" | sudo tee /etc/resolv.conf
+
+      Alternativa via DHCP:
+      ---------------------
+      Se o computador estiver recebendo IP via DHCP, configure o roteador para fornecer DNS:
+
+      No roteador, execute:
+
+      ip dhcp pool VLAN10
+       network 192.168.10.0 255.255.255.0
+       default-router 192.168.10.1
+       dns-server 8.8.8.8 1.1.1.1
+
+      Fim do tutorial.
+    text_font: monospace
+    text_italic: false
+    text_size: 12
+    text_unit: pt
+    thickness: 1
+    type: text
+    x1: -320.0
+    y1: -3560.0
+    z_index: 5
+  - border_color: '#00000000'
+    border_style: ''
+    color: '#808080FF'
+    rotation: 0
+    text_bold: false
+    text_content: |-
+      CONFIGURAÇÃO DO ROTEADOR - EXPLICAÇÃO COMPLETA
+
+      📌 OBJETIVO:
+      Este roteador está configurado para:
+      - Roteamento entre VLANs 10 e 20
+      - Acesso à internet via NAT
+      - Encapsulamento 802.1Q (dot1Q) para subinterfaces
+      - Gateway externo via 192.168.255.1
+      - Acesso remoto via SSH
+
+      ──────────────────────────────────────────────
+      🔧 INTERFACES E VLANs
+
+      1. Ethernet0/0.10 → VLAN 10
+      - Subinterface com encapsulamento dot1Q 10
+      - IP: 192.168.10.1/24
+      - NAT interno ativado (ip nat inside)
+
+      2. Ethernet0/1.20 → VLAN 20
+      - Subinterface com encapsulamento dot1Q 20
+      - IP: 192.168.20.1/24
+      - NAT interno ativado (ip nat inside)
+
+      3. Ethernet0/2 → Rede externa
+      - IP: 192.168.255.100/24
+      - NAT externo ativado (ip nat outside)
+      - Conectada ao gateway 192.168.255.1
+
+      ──────────────────────────────────────────────
+      🌐 ROTEAMENTO
+
+      Rotas padrão configuradas:
+      - ip route 0.0.0.0 0.0.0.0 200.200.200.1 → (obsoleta, sem uso)
+      - ip route 0.0.0.0 0.0.0.0 192.168.255.1 → (ativa e funcional)
+
+      ──────────────────────────────────────────────
+      🔁 NAT (Network Address Translation)
+
+      1. Tradução de endereços:
+      - ip nat inside source list 1 interface Ethernet0/2 overload
+      → Traduz IPs internos para o IP externo 192.168.255.100
+
+      2. ACL 1 (definição das redes internas permitidas):
+      - access-list 1 permit 192.168.10.0 0.0.0.255
+      - access-list 1 permit 192.168.20.0 0.0.0.255
+
+      ──────────────────────────────────────────────
+      🔐 ACESSO REMOTO
+
+      - SSH habilitado:
+        - ip ssh bulk-mode 131072
+        - line vty 0 4
+          - login
+          - transport input ssh
+
+      ──────────────────────────────────────────────
+      ⚙️ OUTRAS CONFIGURAÇÕES
+
+      - ip cef → Cisco Express Forwarding ativado (melhora desempenho)
+      - spanning-tree mode rapid-pvst → evita loops na camada 2
+      - ip http server / secure-server → habilita acesso web (se necessário)
+
+      ──────────────────────────────────────────────
+      ✅ STATUS ATUAL
+
+      - Roteador com acesso à internet via 192.168.255.1
+      - NAT funcionando para VLANs 10 e 20
+      - Pronto para rotear tráfego interno e externo
+
+      ──────────────────────────────────────────────
+    text_font: monospace
+    text_italic: false
+    text_size: 12
+    text_unit: pt
+    thickness: 1
+    type: text
+    x1: 1160.0
+    y1: -2640.0
+    z_index: 6
+  - border_color: '#00000000'
+    border_style: ''
+    color: '#808080FF'
+    rotation: 0
+    text_bold: false
+    text_content: |-
+      Roteador#show running-config
+      Building configuration...
+
+      Current configuration : 1633 bytes
+      !
+      ! Last configuration change at 07:46:08 UTC Sun Oct 12 2025
+      !
+      version 17.16
+      service timestamps debug datetime msec
+      service timestamps log datetime msec
+      !
+      hostname Roteador
+      !
+      boot-start-marker
+      boot-end-marker
+      !
+      !
+      no aaa new-model
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      ip cef
+      login on-success log
+      no ipv6 cef
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      memory free low-watermark processor 79983
+      !
+      !
+      spanning-tree mode rapid-pvst
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      !
+      interface Ethernet0/0
+       no ip address
+      !
+      interface Ethernet0/0.10
+       encapsulation dot1Q 10
+       ip address 192.168.10.1 255.255.255.0
+       ip nat inside
+      !
+      interface Ethernet0/1
+       no ip address
+      !
+      interface Ethernet0/1.20
+       encapsulation dot1Q 20
+       ip address 192.168.20.1 255.255.255.0
+       ip nat inside
+      !
+      interface Ethernet0/2
+       ip address 192.168.255.100 255.255.255.0
+       ip nat outside
+      !
+      interface Ethernet0/3
+       no ip address
+       shutdown
+      !
+      interface Serial1/0
+       no ip address
+       shutdown
+       serial restart-delay 0
+      !
+      interface Serial1/1
+       no ip address
+       shutdown
+       serial restart-delay 0
+      !
+      interface Serial1/2
+       no ip address
+       shutdown
+       serial restart-delay 0
+      !
+      interface Serial1/3
+       no ip address
+       shutdown
+       serial restart-delay 0
+      !
+      ip forward-protocol nd
+      ip forward-protocol udp
+      !
+      !
+      ip http server
+      ip http secure-server
+      ip nat inside source list 1 interface Ethernet0/2 overload
+      ip route 0.0.0.0 0.0.0.0 200.200.200.1
+      ip route 0.0.0.0 0.0.0.0 192.168.255.1
+      ip ssh bulk-mode 131072
+      no logging btrace
+      ip access-list standard 1
+       10 permit 192.168.10.0 0.0.0.255
+       20 permit 192.168.20.0 0.0.0.255
+      !
+      !
+      !
+      control-plane
+      !
+      !
+      !
+      line con 0
+       logging synchronous
+      line aux 0
+      line vty 0 4
+       login
+       transport input ssh
+      !
+      !
+      !
+      !
+      end
+
+      Roteador#
+    text_font: monospace
+    text_italic: false
+    text_size: 12
+    text_unit: pt
+    thickness: 1
+    type: text
+    x1: 640.0
+    y1: -3520.0
+    z_index: 7
+  - border_color: '#00000000'
+    border_style: ''
+    color: '#808080FF'
+    rotation: 0
+    text_bold: false
+    text_content: |-
+      Switch-SW1#show running-config
+      Building configuration...
+
+      Current configuration : 3234 bytes
+      !
+      ! Last configuration change at 08:06:55 UTC Thu Nov 6 2025
+      !
+      version 17.16
+      service timestamps debug datetime msec
+      service timestamps log datetime msec
+      !
+      hostname Switch-SW1
+      !
+      boot-start-marker
+      boot-end-marker
+      !
+      !
+      no aaa new-model
+      !
+      !
+
+      !
+      !
+      !
+      ip audit notify log
+      ip audit po max-events 100
+      ip cef
+      login on-success log
+      no ipv6 cef
+      !
+
+      !
+      !
+      !
+      crypto pki trustpoint TP-self-signed-131184646
+       enrollment selfsigned
+       subject-name cn=IOS-Self-Signed-Certificate-131184646
+       revocation-check none
+       rsakeypair TP-self-signed-131184646
+       hash sha512
+      !
+      !
+      crypto pki certificate chain TP-self-signed-131184646
+       certificate self-signed 01
+
+              quit
+      !
+      !
+      memory free low-watermark processor 79497
+      !
+      !
+      spanning-tree mode rapid-pvst
+      spanning-tree extend system-id
+      !
+      !
+      vlan internal allocation policy ascending
+      !
+      !
+      !
+      !
+      !
+      interface Ethernet0/0
+      !
+      interface Ethernet0/1
+       switchport access vlan 20
+       switchport mode access
+      !
+      interface Ethernet0/2
+       switchport trunk encapsulation dot1q
+       switchport trunk allowed vlan 10,20
+       switchport mode trunk
+      !
+      interface Ethernet0/3
+      !
+      ip forward-protocol nd
+      ip forward-protocol udp
+      !
+      !
+      ip http server
+      ip http secure-server
+      ip ssh bulk-mode 131072
+      !
+      no logging btrace
+      !
+      !
+      !
+      control-plane
+      !
+      !
+      !
+      line con 0
+       logging synchronous
+      line aux 0
+      line vty 0 4
+       login
+       transport input ssh
+      !
+      !
+      end
+
+      Switch-SW1#
+    text_font: monospace
+    text_italic: false
+    text_size: 12
+    text_unit: pt
+    thickness: 1
+    type: text
+    x1: 2920.0
+    y1: -1680.0
+    z_index: 8
+  - border_color: '#00000000'
+    border_style: ''
+    color: '#808080FF'
+    rotation: 0
+    text_bold: false
+    text_content: |-
+      ===========================================================
+                  MODELO OSI APLICADO AO ETHERNET/IP
+      ===========================================================
+
+      | Camada OSI | Nome da Camada   | Protocolos / Tecnologias   | Grupo de Protocolo |
+      |------------|------------------|----------------------------|--------------------|
+      | 7          | Aplicação        | Device Profile             | CIP                |
+      | 6          | Apresentação     | Explicit / Implicit Msg    | CIP                |
+      | 5          | Sessão           | Connection Management      | CIP                |
+      | 4          | Transporte       | TCP, UDP                   | TCP/IP             |
+      | 3          | Rede             | IP                         | TCP/IP             |
+      | 2          | Enlace           | Ethernet MAC               | Ethernet           |
+      | 1          | Física           | Ethernet Physical          | Ethernet           |
+
+      ===========================================================
+      Agrupamento por Pilha de Protocolos:
+      - Ethernet → Camadas 1 e 2
+      - TCP/IP   → Camadas 3 e 4
+      - CIP      → Camadas 5 a 7
+      ===========================================================
+    text_font: monospace
+    text_italic: false
+    text_size: 12
+    text_unit: pt
+    thickness: 1
+    type: text
+    x1: 3080.0
+    y1: -2480.0
+    z_index: 9
+  - border_color: '#00000000'
+    border_style: ''
+    color: '#808080FF'
+    rotation: 0
+    text_bold: false
+    text_content: |-
+      ===========================================================
+              COMPARAÇÃO: CIP em EtherNet/IP, ControlNet e DeviceNet
+      ===========================================================
+
+      | Camada OSI | Função Principal        | EtherNet/IP                | ControlNet                 | DeviceNet             |
+      |------------|-------------------------|----------------------------|----------------------------|-----------------------|
+      | 7          | Aplicação               | Device Profile (CIP)       | Device Profile (CIP)       | Device Profile (CIP)  |
+      | 6          | Apresentação            | Explicit/Implicit Msg (CIP)| Explicit/Implicit Msg (CIP)| Explicit/Implicit Msg |
+      | 5          | Sessão                  | Connection Management (CIP)| Connection Management (CIP)| Connection Management |
+      | 4          | Transporte              | TCP / UDP                  | ControlNet Transport Layer | CAN Transport Layer   |
+      | 3          | Rede                    | IP                         | ControlNet Network Layer   | CAN Network Layer     |
+      | 2          | Enlace                  | Ethernet MAC               | ControlNet MAC             | CAN MAC               |
+      | 1          | Física                  | Ethernet Physical          | Coaxial / Fiber Physical   | CAN Physical          |
+
+      ===========================================================
+      Observações:
+      - CIP (Common Industrial Protocol) é comum às três redes → atua nas camadas 5 a 7.
+      - EtherNet/IP encapsula CIP em TCP/UDP/IP sobre Ethernet.
+      - ControlNet encapsula CIP em uma rede determinística baseada em token (coaxial/fibra).
+      - DeviceNet encapsula CIP sobre CAN (Controller Area Network).
+      ===========================================================
+    text_font: monospace
+    text_italic: false
+    text_size: 12
+    text_unit: pt
+    thickness: 1
+    type: text
+    x1: 3080.0
+    y1: -3160.0
+    z_index: 10
+  - border_color: '#00000000'
+    border_style: ''
+    color: '#808080FF'
+    rotation: 0
+    text_bold: false
+    text_content: |-
+      ===========================================================
+              MODELO OSI APLICADO AO ETHERNET/IP (DETALHADO)
+      ===========================================================
+
+      Camada 7 - Aplicação
+      Protocolos/Tecnologias: Device Profile (CIP)
+      Explicação: Perfis de dispositivos definem funções padronizadas (sensores, atuadores, CLPs).
+      Permitem interoperabilidade entre fabricantes e garantem que diferentes equipamentos
+      "falem a mesma língua" na camada de aplicação.
+
+      -----------------------------------------------------------
+      Camada 6 - Apresentação
+      Protocolos/Tecnologias: Explicit / Implicit Messaging (CIP)
+      Explicação:
+      - Mensagens explícitas: usadas para configuração, diagnóstico e leitura de parâmetros.
+      - Mensagens implícitas: usadas para troca cíclica de dados de I/O em tempo real,
+        garantindo baixa latência e sincronismo.
+
+      -----------------------------------------------------------
+      Camada 5 - Sessão
+      Protocolos/Tecnologias: Connection Management (CIP)
+      Explicação: Gerencia conexões CIP (estabelecimento, manutenção e encerramento).
+      Define se a comunicação será ponto-a-ponto ou multicast, assegurando controle
+      sobre quem envia e quem recebe dados.
+
+      -----------------------------------------------------------
+      Camada 4 - Transporte
+      Protocolos/Tecnologias: TCP, UDP
+      Explicação:
+      - TCP: usado para mensagens explícitas, pois garante confiabilidade e confirmação.
+      - UDP: usado para mensagens implícitas, pois oferece baixa latência e rapidez,
+        ideal para controle em tempo real.
+
+      -----------------------------------------------------------
+      Camada 3 - Rede
+      Protocolos/Tecnologias: IP
+      Explicação: Endereçamento lógico (IPv4). Permite roteamento entre sub-redes industriais
+      e integração com redes corporativas, conectando chão de fábrica ao nível corporativo.
+
+      -----------------------------------------------------------
+      Camada 2 - Enlace
+      Protocolos/Tecnologias: Ethernet MAC
+      Explicação: Define endereços MAC e formato dos quadros Ethernet.
+      Controla o acesso ao meio físico e garante entrega de quadros entre dispositivos
+      na mesma rede local.
+
+      -----------------------------------------------------------
+      Camada 1 - Física
+      Protocolos/Tecnologias: Ethernet Physical
+      Explicação: Meio físico de transmissão (cabos par trançado Cat5e/Cat6, fibra óptica).
+      Define velocidade (10/100/1000 Mbps) e sinalização elétrica/óptica usada
+      para transportar os bits.
+
+      ===========================================================
+      Agrupamento por Pilha de Protocolos:
+      - Ethernet → Camadas 1 e 2
+      - TCP/IP   → Camadas 3 e 4
+      - CIP      → Camadas 5 a 7
+      ===========================================================
+    text_font: monospace
+    text_italic: false
+    text_size: 12
+    text_unit: pt
+    thickness: 1
+    type: text
+    x1: 3840.0
+    y1: -2600.0
+    z_index: 11
+  - border_color: '#00000000'
+    border_style: ''
+    color: '#808080FF'
+    rotation: 0
+    text_bold: false
+    text_content: |-
+      ===========================================================
+              DIFERENÇA ENTRE LAYER 2 E LAYER 3 (EtherNet/IP)
+      ===========================================================
+
+      Layer 2 - Enlace de Dados (Ethernet MAC)
+      ----------------------------------------
+      - Trabalha com endereços MAC (identificadores físicos das interfaces).
+      - Responsável por entregar quadros Ethernet dentro de uma mesma VLAN.
+      - Quando o cartão EtherNet/IP da Rockwell está configurado em uma VLAN,
+        ele só se comunica com dispositivos na mesma VLAN.
+      - O switch Cisco atua como switch Layer 2, encaminhando quadros com base
+        nos endereços MAC e mantendo o tráfego isolado por VLAN.
+
+      Resultado: comunicação restrita ao domínio Layer 2 (mesma VLAN).
+
+      -----------------------------------------------------------
+
+      Layer 3 - Rede (IP)
+      ----------------------------------------
+      - Trabalha com endereços IP e permite comunicação entre diferentes VLANs.
+      - Quando o switch Cisco tem roteamento habilitado (ip routing),
+        ele passa a atuar como roteador Layer 3.
+      - Isso cria a possibilidade de inter-VLAN routing, ou seja,
+        dispositivos em VLANs diferentes podem se comunicar via IP.
+      - O EtherNet/IP continua encapsulado em TCP/UDP/IP, mas agora o switch
+        faz a função de rotear pacotes IP entre VLANs distintas.
+
+      Resultado: comunicação entre diferentes VLANs via Layer 3.
+
+      -----------------------------------------------------------
+
+      Exemplo prático:
+      ----------------------------------------
+      1. Layer 2:
+         - Cartão EtherNet/IP configurado na VLAN 10.
+         - Comunicação apenas com dispositivos na VLAN 10.
+         - Switch Cisco encaminha quadros Ethernet com base em MAC.
+
+      2. Layer 3:
+         - Switch Cisco com roteamento habilitado.
+         - Interfaces VLAN (SVI) configuradas:
+           VLAN 10 → IP 192.168.10.1
+           VLAN 20 → IP 192.168.20.1
+         - Switch roteia pacotes IP entre VLAN 10 e VLAN 20.
+         - Cartão EtherNet/IP na VLAN 10 pode conversar com dispositivos na VLAN 20 via IP.
+
+      -----------------------------------------------------------
+
+      Conclusão:
+      ----------------------------------------
+      - Layer 2 → comunicação dentro da mesma VLAN, baseada em MAC.
+      - Layer 3 → comunicação entre VLANs, baseada em IP, com roteamento habilitado.
+      - No cenário: cartão EtherNet/IP da Rockwell está em Layer 2 quando limitado à VLAN.
+        Ao habilitar roteamento no switch Cisco, você passa a operar em Layer 3,
+        permitindo integração entre VLANs diferentes.
+
+      ===========================================================
+    text_font: monospace
+    text_italic: false
+    text_size: 12
+    text_unit: pt
+    thickness: 1
+    type: text
+    x1: 4720.0
+    y1: -2600.0
+    z_index: 12
+  - border_color: '#00000000'
+    border_style: ''
+    color: '#808080FF'
+    rotation: 0
+    text_bold: false
+    text_content: |-
+      ## 🔧 explicacao do codigo roteador
+      - version 17.16 → Versão do IOS (sistema operacional da Cisco).
+      - service timestamps debug/log datetime msec → Adiciona data/hora (com milissegundos) nos logs e mensagens de debug.
+      - hostname Roteador → Nome do dispositivo na rede.
+      - boot-start-marker / boot-end-marker → Marcadores usados pelo sistema para identificar início/fim da configuração de boot.
+      - no aaa new-model → Não está usando AAA (Authentication, Authorization, Accounting) centralizado.
+
+      ## 🔒 Segurança e certificados
+      - crypto pki trustpoint TP-self-signed-131184642 → Cria um ponto de confiança para certificados.
+      - enrollment selfsigned → O certificado é autoassinado.
+      - subject-name cn=IOS-Self-Signed-Certificate-131184642 → Nome comum do certificado.
+      - hash sha512 → Algoritmo de hash usado.
+      - crypto pki certificate chain … → Bloco que mostra o certificado autoassinado.
+
+      ## ⚡ Processamento e protocolos
+      - ip cef → Ativa CEF (Cisco Express Forwarding), que melhora desempenho no roteamento.
+      - no ipv6 cef → Desativa CEF para IPv6.
+      - memory free low-watermark processor 79983 → Limite de memória livre para alertas.
+      - spanning-tree mode rapid-pvst → Usa Rapid PVST (variante rápida do Spanning Tree Protocol).
+
+      ## 🌐 Interfaces
+      - Ethernet0/0 → Sem IP configurado.
+      - Ethernet0/0.10
+        - encapsulation dot1Q 10 → Subinterface para VLAN 10.
+        - ip address 192.168.10.1 255.255.255.0 → IP da subinterface.
+        - ip nat inside → Define como interface interna para NAT.
+      - Ethernet0/1 → Sem IP.
+      - Ethernet0/1.20
+        - VLAN 20, IP 192.168.20.1/24, NAT inside.
+      - Ethernet0/2
+        - ip address 192.168.255.100 255.255.255.0 → IP da interface externa.
+        - ip nat outside → Interface externa para NAT.
+      - Ethernet0/3 → Sem IP, desligada (shutdown).
+      - Serial1/0 a Serial1/3 → Todas desligadas (shutdown).
+
+      ## 📡 Serviços e NAT
+      - ip http server / ip http secure-server → Ativa servidor HTTP e HTTPS para gerência.
+      - ip nat inside source list 1 interface Ethernet0/2 overload
+        - Faz NAT (mascaramento) para os endereços definidos na ACL 1.
+        - Usa o IP da interface Ethernet0/2 como saída.
+        - overload → Permite múltiplos hosts compartilharem o mesmo IP público (PAT).
+      - ip route 0.0.0.0 0.0.0.0 192.168.255.1 → Rota default apontando para o gateway 192.168.255.1.
+      - ip ssh bulk-mode 131072 → Configuração de SSH para conexões simultâneas.
+      - no logging btrace → Desativa logs de btrace.
+
+      ## 🛡️ ACL (Access Control List)
+      - ip access-list standard 1
+        - 10 permit 192.168.10.0 0.0.0.255 → Permite rede 192.168.10.0/24.
+        - 20 permit 192.168.20.0 0.0.0.255 → Permite rede 192.168.20.0/24.
+        → Essa ACL é usada pelo NAT.
+
+      ## 🎛️ Linhas de acesso
+      - line con 0 → Console.
+        - logging synchronous → Evita que mensagens interrompam comandos digitados.
+      - line aux 0 → Porta auxiliar (não configurada).
+      - line vty 0 4 → Linhas virtuais (Telnet/SSH).
+        - login → Exige login.
+        - transport input ssh → Só permite acesso remoto via SSH.
+
+      ## 📌 Resumindo
+      Esse roteador está configurado para:
+      - Ser o gateway das redes 192.168.10.0/24 (VLAN 10) e 192.168.20.0/24 (VLAN 20).
+      - Fazer NAT/PAT para que essas redes acessem a internet via 192.168.255.100.
+      - Ter acesso remoto seguro via SSH.
+      - Ter servidor de administração via HTTP/HTTPS.
+      - Usar Spanning Tree Rapid PVST para evitar loops na rede.
+      - Usar certificado autoassinado para conexões seguras.
+    text_font: monospace
+    text_italic: false
+    text_size: 12
+    text_unit: pt
+    thickness: 1
+    type: text
+    x1: 3840.0
+    y1: -1080.0
+    z_index: 13
+  - border_color: '#00000000'
+    border_style: ''
+    color: '#808080FF'
+    rotation: 0
+    text_bold: false
+    text_content: |-
+      ### Explicação detalhada da rota default
+
+      Comando:
+      ip route 0.0.0.0 0.0.0.0 192.168.255.1
+
+      1. ip route
+         → Indica que estamos configurando uma rota estática no roteador.
+
+      2. 0.0.0.0 0.0.0.0
+         → Esse par (endereço e máscara) representa a "rota default".
+         → O primeiro 0.0.0.0 é o endereço de rede.
+         → O segundo 0.0.0.0 é a máscara.
+         → Juntos significam: "qualquer destino".
+         → Ou seja, se o roteador receber um pacote para um IP que não está em nenhuma rota específica da tabela, ele usará essa rota.
+
+      3. 192.168.255.1
+         → Esse é o "next-hop" (próximo salto).
+         → É o gateway para onde o roteador deve enviar os pacotes desconhecidos.
+         → Normalmente esse IP pertence ao modem ou outro roteador que conecta à internet.
+
+      ---
+
+      ### Por que usar 0.0.0.0/0?
+      - Em roteamento, quanto mais específica a máscara, maior a prioridade.
+      - 0.0.0.0/0 é a máscara menos específica possível.
+      - Isso cobre todos os endereços IPv4.
+      - Assim, essa rota funciona como um "coringa" ou "rota de fuga".
+
+      ---
+
+      ### Função prática
+      - O roteador conhece suas redes internas (192.168.10.0/24 e 192.168.20.0/24).
+      - Quando um PC dessas redes tenta acessar, por exemplo, 8.8.8.8 (Google DNS), o roteador não tem rota específica para esse IP.
+      - Ele consulta a tabela de rotas e encontra a rota default.
+      - Resultado: o pacote é enviado para 192.168.255.1, que é o gateway para a internet.
+
+      ---
+
+      ### Diferença entre configurar com next-hop ou interface
+      1. Usando next-hop:
+         ip route 0.0.0.0 0.0.0.0 192.168.255.1
+         → O roteador envia tudo para esse IP específico.
+
+      2. Usando interface de saída:
+         ip route 0.0.0.0 0.0.0.0 Ethernet0/2
+         → O roteador joga os pacotes diretamente pela interface.
+
+      No seu caso, foi usado o gateway 192.168.255.1, que provavelmente é o equipamento que conecta à internet.
+
+      ---
+
+      ### Resumo simples
+      - 0.0.0.0 0.0.0.0 = "qualquer destino"
+      - 192.168.255.1 = "mande para esse gateway"
+      → Assim, o roteador sabe para onde enviar pacotes desconhecidos, garantindo que os hosts internos tenham acesso à internet.
+    text_font: monospace
+    text_italic: false
+    text_size: 12
+    text_unit: pt
+    thickness: 1
+    type: text
+    x1: 5040.0
+    y1: -1040.0
+    z_index: 14
+smart_annotations: []
+nodes:
+  - boot_disk_size: null
+    configuration: []
+    cpu_limit: null
+    cpus: null
+    data_volume: null
+    hide_links: false
+    id: n0
+    image_definition: null
+    label: iol-4s-0
+    node_definition: iol-xe-serial-4eth
+    parameters: {}
+    ram: null
+    tags: []
+    x: 2480
+    y: -1960
+    interfaces:
+      - id: i0
+        label: Loopback0
+        mac_address: null
+        type: loopback
+      - id: i1
+        label: Ethernet0/0
+        mac_address: null
+        type: physical
+        slot: 0
+      - id: i2
+        label: Ethernet0/1
+        mac_address: null
+        type: physical
+        slot: 1
+      - id: i3
+        label: Ethernet0/2
+        mac_address: null
+        type: physical
+        slot: 2
+      - id: i4
+        label: Ethernet0/3
+        mac_address: null
+        type: physical
+        slot: 3
+      - id: i5
+        label: Serial1/0
+        mac_address: null
+        type: physical
+        slot: 4
+      - id: i6
+        label: Serial1/1
+        mac_address: null
+        type: physical
+        slot: 5
+      - id: i7
+        label: Serial1/2
+        mac_address: null
+        type: physical
+        slot: 6
+      - id: i8
+        label: Serial1/3
+        mac_address: null
+        type: physical
+        slot: 7
+  - boot_disk_size: null
+    configuration: []
+    cpu_limit: null
+    cpus: null
+    data_volume: null
+    hide_links: false
+    id: n1
+    image_definition: null
+    label: iol-l2-0
+    node_definition: ioll2-xe
+    parameters: {}
+    ram: null
+    tags: []
+    x: 2320
+    y: -1840
+    interfaces:
+      - id: i0
+        label: Loopback0
+        mac_address: null
+        type: loopback
+      - id: i1
+        label: Ethernet0/0
+        mac_address: null
+        type: physical
+        slot: 0
+      - id: i2
+        label: Ethernet0/1
+        mac_address: null
+        type: physical
+        slot: 1
+      - id: i3
+        label: Ethernet0/2
+        mac_address: null
+        type: physical
+        slot: 2
+      - id: i4
+        label: Ethernet0/3
+        mac_address: null
+        type: physical
+        slot: 3
+  - boot_disk_size: null
+    configuration: []
+    cpu_limit: null
+    cpus: null
+    data_volume: null
+    hide_links: false
+    id: n2
+    image_definition: null
+    label: iol-l2-1
+    node_definition: ioll2-xe
+    parameters: {}
+    ram: null
+    tags: []
+    x: 2640
+    y: -1840
+    interfaces:
+      - id: i0
+        label: Loopback0
+        mac_address: null
+        type: loopback
+      - id: i1
+        label: Ethernet0/0
+        mac_address: null
+        type: physical
+        slot: 0
+      - id: i2
+        label: Ethernet0/1
+        mac_address: null
+        type: physical
+        slot: 1
+      - id: i3
+        label: Ethernet0/2
+        mac_address: null
+        type: physical
+        slot: 2
+      - id: i4
+        label: Ethernet0/3
+        mac_address: null
+        type: physical
+        slot: 3
+  - boot_disk_size: null
+    configuration: []
+    cpu_limit: null
+    cpus: null
+    data_volume: null
+    hide_links: false
+    id: n3
+    image_definition: null
+    label: ext-conn-0
+    node_definition: external_connector
+    parameters: {}
+    ram: null
+    tags: []
+    x: 2480
+    y: -2080
+    interfaces:
+      - id: i0
+        label: port
+        mac_address: null
+        type: physical
+        slot: 0
+  - boot_disk_size: null
+    configuration: []
+    cpu_limit: null
+    cpus: null
+    data_volume: null
+    hide_links: false
+    id: n4
+    image_definition: null
+    label: desktop-0
+    node_definition: desktop
+    parameters: {}
+    ram: null
+    tags: []
+    x: 2160
+    y: -1840
+    interfaces:
+      - id: i0
+        label: eth0
+        mac_address: null
+        type: physical
+        slot: 0
+  - boot_disk_size: null
+    configuration: []
+    cpu_limit: null
+    cpus: null
+    data_volume: null
+    hide_links: false
+    id: n5
+    image_definition: null
+    label: desktop-1
+    node_definition: desktop
+    parameters: {}
+    ram: null
+    tags: []
+    x: 2800
+    y: -1840
+    interfaces:
+      - id: i0
+        label: eth0
+        mac_address: null
+        type: physical
+        slot: 0
+links:
+  - id: l0
+    n1: n0
+    n2: n2
+    i1: i2
+    i2: i3
+    conditioning: {}
+    label: iol-4s-0-Ethernet0/1<->iol-l2-1-Ethernet0/2
+  - id: l1
+    n1: n1
+    n2: n0
+    i1: i3
+    i2: i1
+    conditioning: {}
+    label: iol-l2-0-Ethernet0/2<->iol-4s-0-Ethernet0/0
+  - id: l2
+    n1: n2
+    n2: n5
+    i1: i2
+    i2: i0
+    conditioning: {}
+    label: iol-l2-1-Ethernet0/1<->desktop-1-eth0
+  - id: l3
+    n1: n4
+    n2: n1
+    i1: i0
+    i2: i2
+    conditioning: {}
+    label: desktop-0-eth0<->iol-l2-0-Ethernet0/1
+  - id: l4
+    n1: n3
+    n2: n0
+    i1: i0
+    i2: i3
+    conditioning: {}
+    label: ext-conn-0-port<->iol-4s-0-Ethernet0/2
+lab:
+  description: Laboratório para simular ambiente industrial entre vlan's e comunicação
+    externa.
+  notes: ''
+  title: KraftHeinzt 05:18 AM
+  version: 0.3.0
