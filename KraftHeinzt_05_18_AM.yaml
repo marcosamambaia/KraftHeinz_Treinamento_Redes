@@ -1176,6 +1176,82 @@ annotations:
     x1: 5040.0
     y1: -1040.0
     z_index: 14
+  - border_color: '#00000000'
+    border_style: ''
+    color: '#808080FF'
+    rotation: 0
+    text_bold: false
+    text_content: |-
+      ----------------------------------------------------------------------------------------------------------------
+      Comparativo entre Modelo TCP/IP e Modelo Ethernet/IP
+      ----------------------------------------------------------------------------------------------------------------
+
+      Aspecto                  | TCP/IP                          | Ethernet/IP
+      ----------------------------------------------------------------------------------------------------------------
+      Origem                   | Desenvolvido pela DARPA (anos 70)| Desenvolvido pela Rockwell e ODVA (anos 90)
+      ----------------------------------------------------------------------------------------------------------------
+      Objetivo                 | Modelo de comunicação universal | Protocolo industrial baseado em Ethernet
+      ----------------------------------------------------------------------------------------------------------------
+      Camadas                  | 4 camadas:                     | Baseado no TCP/IP + CIP (Common Industrial Protocol)
+                               | - Aplicação                    | - Usa Ethernet como meio físico
+                               | - Transporte                   | - Integra protocolos industriais
+                               | - Internet                     |
+                               | - Acesso à rede                |
+      ----------------------------------------------------------------------------------------------------------------
+      Uso principal            | Internet, redes corporativas    | Automação industrial, controle de dispositivos
+      ----------------------------------------------------------------------------------------------------------------
+      Protocolos associados    | HTTP, FTP, SMTP, DNS, etc.      | CIP, Modbus/TCP, DeviceNet sobre Ethernet
+      ----------------------------------------------------------------------------------------------------------------
+      Comunicação              | Entre computadores e servidores | Entre controladores, sensores e atuadores
+      ----------------------------------------------------------------------------------------------------------------
+      Padronização             | RFCs (IETF)                    | ODVA (Open DeviceNet Vendors Association)
+      ----------------------------------------------------------------------------------------------------------------
+      Segurança                | TLS, IPSec                     | Depende da implementação, pode usar TLS/IPSec
+      ----------------------------------------------------------------------------------------------------------------
+      Escopo                   | Global (Internet)              | Local/industrial (fábricas, plantas industriais)
+      ----------------------------------------------------------------------------------------------------------------
+    text_font: monospace
+    text_italic: false
+    text_size: 12
+    text_unit: pt
+    thickness: 1
+    type: text
+    x1: 3080.0
+    y1: -4000.0
+    z_index: 15
+  - border_color: '#00000000'
+    border_style: ''
+    color: '#808080FF'
+    rotation: 0
+    text_bold: false
+    text_content: |-
+      ---------------------------------------------------------------------------------------------------------
+      Comparativo entre OSI, TCP/IP e Ethernet/IP
+      ---------------------------------------------------------------------------------------------------------
+
+      Camadas OSI (7)          | Modelo TCP/IP (4)              | Modelo Ethernet/IP
+      ---------------------------------------------------------------------------------------------------------
+      7 - Aplicação            | Aplicação                      | CIP (Common Industrial Protocol)
+      6 - Apresentação         | (Incluída na Aplicação)        | CIP (dados estruturados, objetos industriais)
+      5 - Sessão               | (Incluída na Aplicação)        | CIP (gerenciamento de conexões industriais)
+      ---------------------------------------------------------------------------------------------------------
+      4 - Transporte           | Transporte                     | TCP/UDP (transporte confiável ou rápido)
+      ---------------------------------------------------------------------------------------------------------
+      3 - Rede                 | Internet                       | IP (IPv4/IPv6)
+      ---------------------------------------------------------------------------------------------------------
+      2 - Enlace de Dados      | Acesso à Rede                  | Ethernet (IEEE 802.3)
+      ---------------------------------------------------------------------------------------------------------
+      1 - Física               | Acesso à Rede                  | Cabo, fibra, rádio (meio físico)
+      ---------------------------------------------------------------------------------------------------------
+    text_font: monospace
+    text_italic: false
+    text_size: 12
+    text_unit: pt
+    thickness: 1
+    type: text
+    x1: 4320.0
+    y1: -3840.0
+    z_index: 16
 smart_annotations: []
 nodes:
   - boot_disk_size: null
