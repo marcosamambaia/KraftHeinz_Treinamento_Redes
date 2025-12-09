@@ -56,18 +56,16 @@ Este projeto faz parte de um **treinamento de rede para a equipe técnica da Kra
 
 ##  Diagrama Simplificado
 
-                                                (Internet)
-                                                    ^
-                                                    |
-                                                    |
-                                                  E0/2
-[PC VLAN 10]E0<------>E0/1-[SW0]-E0/2<----->E0/0-[Roteador]-E0/1<------>E0/1-[SW1]-E0/1<----->E0[PC VLAN 20]
-Alphine-Linux_________Switch Cisco______________Roteador Cisco_________Switch Cisco____________Alphine Linux
+                                                  (Internet)
+                                                      ^
+                                                      |
+                                                      |
+                                                     E0/2
+    PC VLAN 10]E0<------>E0/1-[SW0]-E0/2<----->E0/0-[Roteador]-E0/1<------>E0/1-[SW1]-E0/1<----->E0[PC VLAN 20]
+    Alphine-Linux_________Switch Cisco______________Roteador Cisco_________Switch Cisco____________Alphine Linux
 
 
 
-
----
 
 ##  Objetivo
 
@@ -92,4 +90,5 @@ Alphine-Linux_________Switch Cisco______________Roteador Cisco_________Switch Ci
 - O roteador usa **NAT overload (PAT)**, permitindo múltiplos hosts compartilharem o mesmo IP público.  
 - O gateway externo (192.168.255.1) deve estar configurado corretamente para fornecer acesso à Internet.  
 - Spanning Tree Rapid-PVST garante prevenção de loops na camada 2.  
+
 
