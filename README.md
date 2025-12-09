@@ -55,16 +55,16 @@ Este projeto faz parte de um **treinamento de rede para a equipe técnica da Kra
 ---
 
 ##  Diagrama Simplificado
-#########################################################################################################################
+
                                                 (Internet)
                                                     ^
                                                     |
                                                     |
                                                   E0/2
-[PC VLAN 10]E0 <---> E0/1-[SW0]-E0/2 <---> E0/0-[Roteador]-E0/1 <---> E0/1-[SW1]-E0/1 <---> E0[PC VLAN 20]
-Alphine Linux            Switch Cisco         Roteador Cisco              Switch Cisco      Alphine Linux
+[PC VLAN 10]E0<------>E0/1-[SW0]-E0/2<----->E0/0-[Roteador]-E0/1<------>E0/1-[SW1]-E0/1<----->E0[PC VLAN 20]
+Alphine-Linux_________Switch Cisco______________Roteador Cisco_________Switch Cisco____________Alphine Linux
 
-##########################################################################################################################
+
 
 
 ---
