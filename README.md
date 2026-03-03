@@ -1,6 +1,6 @@
 # Topologia de Rede - Projeto CML
 
-Este projeto faz parte de um **treinamento de rede para a equipe técnica da KraftHeinz**, utilizando **Cisco Modeling Labs (CML)** com um **roteador** e dois **switches**, configurados para suportar múltiplas VLANs e acesso à Internet via NAT.
+Este projeto faz parte de um **treinamento de rede para a equipe técnica da KraftHeinz**, utilizando **Cisco Modeling Labs (CML)** com um **roteador** e dois **switch's**, configurados para suportar múltiplas VLANs e acesso à Internet via NAT.
 
 
 ---
